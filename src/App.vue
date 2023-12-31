@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Header from './components/Header.vue';
 import Form from './components/Form.vue';
-import { ref, reactive } from 'vue';
+import { ref, reactive, onMounted, watch } from 'vue';
 import { Patient as PatientProps } from './entities/patient';
 import Patient from './components/Patient.vue';
 
@@ -16,11 +16,29 @@ const patient = reactive({
   sintomas: '',
 });
 
+onMounted(() => {
+  const patientsInStorage = localStorage.getItem('patients');
+  if (patientsInStorage) {
+    patients.value = JSON.parse(patientsInStorage);
+  }
+});
+
+watch(
+  patients,
+  () => {
+    saveInLocalStorage();
+  },
+  { deep: true }
+);
+
+const saveInLocalStorage = () => {
+  localStorage.setItem('patients', JSON.stringify(patients.value));
+};
 const savePatient = () => {
   if (patient.id) {
-    const {id} = patient
-    const index = patients.value.findIndex(p => p.id === id)
-    patients.value[index] = {...patient}
+    const { id } = patient;
+    const index = patients.value.findIndex((p) => p.id === id);
+    patients.value[index] = { ...patient };
   } else {
     patients.value.push({ ...patient, id: new Date().getUTCMilliseconds() });
   }
@@ -30,13 +48,18 @@ const savePatient = () => {
     email: '',
     alta: '',
     sintomas: '',
-    id: null
+    id: null,
   });
+  saveInLocalStorage();
 };
 
 const editPatient = (id: number) => {
   const patientEdit = patients.value.filter((p) => p.id === id)[0];
   Object.assign(patient, patientEdit);
+};
+
+const deletePatient = (id: number) => {
+  patients.value = patients.value.filter((p) => p.id !== id);
 };
 </script>
 
@@ -64,6 +87,7 @@ const editPatient = (id: number) => {
             v-for="patient in patients"
             :patient="patient"
             @edit-patient="editPatient"
+            @delete-patient="deletePatient"
           />
         </div>
         <p v-else class="mt-20 text-2xl text-center text-red-500">
