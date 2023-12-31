@@ -1,4 +1,30 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { reactive } from 'vue';
+import Alert from './Alert.vue'
+
+const alerta = reactive({
+    type: '',
+    message: '',
+})
+const paciente = reactive({
+  name: '',
+  owner: '',
+  email: '',
+  alta: '',
+  sintomas: '',
+});
+
+const validate = () => {
+  if (Object.values(paciente).includes('')) {
+    alerta.message = 'Todos os campos são obrigatórios'
+    alerta.type = 'error'
+    console.log('error')
+    return;
+  }
+  alerta.message = 'Guardado correctamente'
+  alerta.type = 'success'
+};
+</script>
 
 <template>
   <div class="md:w-1/2">
@@ -7,7 +33,11 @@
       Adiciona Pacientes e
       <span class="text-indigo-600 font-bold">Administra-os</span>
     </p>
-    <form class="bg-white shadow-md rounded-lg py-10 px-5 mb-10 space-y-5">
+    <Alert v-if="alerta.message" :alerta="alerta" />
+    <form
+      class="bg-white shadow-md rounded-lg py-10 px-5 mb-10 space-y-5"
+      @submit.prevent="validate"
+    >
       <div class="">
         <label for="name" class="block text-gray-700 uppercase font-bold"
           >Nome do animal</label
@@ -17,6 +47,7 @@
           id="name"
           class="border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-md"
           placeholder="Nome do animal"
+          v-model="paciente.name"
         />
       </div>
       <div class="">
@@ -28,6 +59,7 @@
           id="owner"
           class="border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-md"
           placeholder="Nome do proprietário"
+          v-model="paciente.owner"
         />
       </div>
       <div class="">
@@ -39,6 +71,7 @@
           id="email"
           class="border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-md"
           placeholder="E-mail do proprietário"
+          v-model="paciente.email"
         />
       </div>
       <div class="">
@@ -49,6 +82,7 @@
           type="date"
           id="alta"
           class="border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-md"
+          v-model="paciente.alta"
         />
       </div>
       <div class="">
@@ -59,14 +93,13 @@
           id="sintomas"
           class="border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-md h-40"
           placeholder="Descreva os sintomas"
+          v-model="paciente.sintomas"
         />
       </div>
       <input
         type="submit"
         value="Registrar Paciente"
-        class="bg-indigo-600 w-full uppercase font-bold p-3 
-        text-white hover:bg-indigo-800 
-        cursor-pointer transition-colors"
+        class="bg-indigo-600 w-full uppercase font-bold p-3 text-white hover:bg-indigo-800 cursor-pointer transition-colors"
       />
     </form>
   </div>
