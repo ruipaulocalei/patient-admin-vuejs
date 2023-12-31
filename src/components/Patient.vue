@@ -4,6 +4,8 @@ defineProps<{
   patient: Patient;
 }>();
 
+defineEmits(['edit-patient'])
+
 </script>
 <template>
     <div class="mx-5 mt-10 bg-white shadow-md px-5 py-10 rounded-xl">
@@ -30,7 +32,8 @@ defineProps<{
         </p>
         <div class="grid md:grid-cols-2 gap-5 mt-10">
             <button type="button" class="block w-full 
-            py-2 px-10 bg-indigo-700 text-white font-bold uppercase rounded-lg">
+            py-2 px-10 bg-indigo-700 text-white font-bold uppercase rounded-lg"
+            @click="$emit('edit-patient', patient.id)">
         Editar</button>
             <button type="button" class="block w-full 
             py-2 px-10 bg-red-600 text-white font-bold uppercase rounded-lg">

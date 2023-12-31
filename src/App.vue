@@ -17,14 +17,26 @@ const patient = reactive({
 });
 
 const savePatient = () => {
-  patients.value.push({ ...patient, id: new Date().getUTCMilliseconds() });
+  if (patient.id) {
+    const {id} = patient
+    const index = patients.value.findIndex(p => p.id === id)
+    patients.value[index] = {...patient}
+  } else {
+    patients.value.push({ ...patient, id: new Date().getUTCMilliseconds() });
+  }
   Object.assign(patient, {
     name: '',
     owner: '',
     email: '',
     alta: '',
     sintomas: '',
+    id: null
   });
+};
+
+const editPatient = (id: number) => {
+  const patientEdit = patients.value.filter((p) => p.id === id)[0];
+  Object.assign(patient, patientEdit);
 };
 </script>
 
@@ -39,6 +51,7 @@ const savePatient = () => {
         v-model:alta="patient.alta"
         v-model:sintomas="patient.sintomas"
         @save-patient="savePatient"
+        :id="patient.id"
       />
       <div class="md:w-1/2 md:h-screen overflow-y-scroll">
         <h3 class="font-black text-3xl text-center">Admin your patient</h3>
@@ -47,7 +60,11 @@ const savePatient = () => {
             Informações de
             <span class="text-indigo-600 font-bold">Pacientes</span>
           </p>
-          <Patient v-for="patient in patients" :patient="patient" />
+          <Patient
+            v-for="patient in patients"
+            :patient="patient"
+            @edit-patient="editPatient"
+          />
         </div>
         <p v-else class="mt-20 text-2xl text-center text-red-500">
           Sem pacientes
