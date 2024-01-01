@@ -19,11 +19,11 @@ const emit = defineEmits([
 
 const props = defineProps<{
   id: null;
-  name: '';
-  owner: '';
-  email: '';
-  alta: '';
-  sintomas: '';
+  name: string;
+  owner: string;
+  email: string;
+  alta: string;
+  sintomas: string;
 }>();
 const validate = () => {
   if (Object.values(props).includes('')) {
@@ -73,7 +73,7 @@ const editing = computed(() => {
           class="border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-md"
           placeholder="Nome do animal"
           :value="name"
-          @input="$emit('update:name', $event.target?.value)"
+          @input="$emit('update:name', ($event.target as HTMLInputElement)?.value)"
         />
       </div>
       <div class="">
@@ -86,7 +86,7 @@ const editing = computed(() => {
           class="border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-md"
           placeholder="Nome do proprietário"
           :value="owner"
-          @input="$emit('update:owner', $event.target?.value)"
+          @input="$emit('update:owner', ($event.target as HTMLInputElement)?.value)"
         />
       </div>
       <div class="">
@@ -99,7 +99,7 @@ const editing = computed(() => {
           class="border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-md"
           placeholder="E-mail do proprietário"
           :value="email"
-          @input="$emit('update:email', $event.target?.value)"
+          @input="$emit('update:email', ($event.target as HTMLInputElement)?.value)"
         />
       </div>
       <div class="">
@@ -111,7 +111,7 @@ const editing = computed(() => {
           id="alta"
           class="border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-md"
           :value="alta"
-          @input="$emit('update:alta', $event.target?.value)"
+          @input="$emit('update:alta', ($event.target as HTMLInputElement)?.value)"
         />
       </div>
       <div class="">
@@ -123,7 +123,7 @@ const editing = computed(() => {
           class="border-2 w-full p-2 mt-2 placeholder-gray-500 rounded-md h-40"
           placeholder="Descreva os sintomas"
           :value="sintomas"
-          @input="$emit('update:sintomas', $event.target?.value)"
+          @input="$emit('update:sintomas', ($event.target as HTMLInputElement)?.value)"
         />
       </div>
       <input
